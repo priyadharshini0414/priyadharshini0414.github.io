@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Priyadharshini O S — DevOps &amp; Cloud Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bp-bg: #0B3D66;
+    --bp-bg-2: #0E4A7A;
+    --bp-bg-3: #092F4F;
+    --grid: rgba(255,255,255,0.07);
+    --grid-strong: rgba(255,255,255,0.14);
+    --paper: #F2F0E6;
+    --paper-dim: #C9D9E8;
+    --slate: #8FB4D6;
+    --amber: #F2A93B;
+    --green: #6FCF97;
+    --line: #3D7CB0;
+    --card-bg: #0E4670;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bp-bg);
+    color:var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  ::selection{ background:var(--amber); color:var(--bp-bg-3); }
+
+  a{ color:inherit; }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--amber);
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    background:rgba(11,61,102,0.85);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-brand{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600; font-size:15px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .nav-brand .dot{ width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); }
+  .nav-links{ display:flex; gap:28px; font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+  .nav-links a{ text-decoration:none; color:var(--paper-dim); padding-bottom:4px; border-bottom:1px solid transparent; transition:.2s; }
+  .nav-links a:hover, .nav-links a:focus-visible{ color:var(--amber); border-color:var(--amber); outline:none; }
+  @media (max-width:720px){ .nav-links{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding:120px 6vw 60px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap:40px;
+    max-width:1280px;
+    margin:0 auto;
+    align-items:center;
+    width:100%;
+  }
+  .eyebrow{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow .bar{ width:28px; height:1px; background:var(--amber); }
+  h1.name{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    font-size:clamp(2.4rem, 5.2vw, 4.2rem);
+    line-height:1.02;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  h1.name .accent{ color:var(--amber); }
+  .role{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:500;
+    font-size:clamp(1.1rem,2vw,1.4rem);
+    color:var(--paper-dim);
+    margin:0 0 22px;
+  }
+  .tagline{
+    max-width:46ch;
+    color:var(--slate);
+    line-height:1.65;
+    margin:0 0 34px;
+    font-size:15.5px;
+  }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    letter-spacing:.05em;
+    text-decoration:none;
+    padding:13px 22px;
+    border-radius:2px;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:.2s;
+  }
+  .btn-primary{ background:var(--amber); color:var(--bp-bg-3); font-weight:600; }
+  .btn-primary:hover{ background:#ffbf5c; transform:translateY(-1px); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--paper); }
+  .btn-ghost:hover{ border-color:var(--amber); color:var(--amber); }
+  .btn:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+
+  /* diagram */
+  .diagram-wrap{ position:relative; }
+  .diagram-wrap svg{ width:100%; height:auto; display:block; }
+  .node-label{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; fill:var(--paper-dim); }
+  .node-label.core{ fill:var(--paper); font-weight:600; font-size:13px; }
+  .node-circle{ fill:var(--bp-bg-3); stroke:var(--line); stroke-width:1.5; }
+  .node-circle.core{ fill:var(--amber); stroke:var(--amber); }
+  .conn{
+    stroke:var(--slate); stroke-width:1; stroke-dasharray:4 5; opacity:.55;
+    stroke-dashoffset:0;
+    animation: dash 22s linear infinite;
+  }
+  @keyframes dash{ to{ stroke-dashoffset:-500; } }
+  .crosshair{ stroke:var(--grid-strong); stroke-width:1; }
+  @media (prefers-reduced-motion: reduce){ .conn{ animation:none; } html{ scroll-behavior:auto; } }
+
+  @media (max-width:900px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .diagram-wrap{ order:-1; max-width:420px; margin:0 auto; }
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding:100px 6vw; position:relative; }
+  .section-inner{ max-width:1120px; margin:0 auto; }
+  .section-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:48px; }
+  .section-num{ font-family:'IBM Plex Mono', monospace; color:var(--line); font-size:13px; }
+  h2{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(1.5rem,3vw,2.1rem);
+    margin:0;
+    font-weight:600;
+  }
+  .section-rule{ flex:1; height:1px; background:var(--line); }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:60px; align-items:start; }
+  .about-text{ color:var(--paper-dim); line-height:1.75; font-size:16px; }
+  .about-text strong{ color:var(--paper); }
+  .spec-box{
+    border:1px solid var(--line);
+    padding:22px 24px;
+    background:var(--card-bg);
+  }
+  .spec-row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed rgba(255,255,255,.12); font-family:'IBM Plex Mono', monospace; font-size:12.5px; }
+  .spec-row:last-child{ border-bottom:none; }
+  .spec-row span:first-child{ color:var(--slate); }
+  .spec-row span:last-child{ color:var(--paper); }
+  @media (max-width:800px){ .about-grid{ grid-template-columns:1fr; gap:32px; } }
+
+  /* ---------- STACK ---------- */
+  .stack-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+    gap:14px;
+  }
+  .stack-card{
+    border:1px solid var(--line);
+    background:var(--card-bg);
+    padding:18px 16px;
+    transition:.2s;
+    position:relative;
+  }
+  .stack-card:hover{ border-color:var(--amber); transform:translateY(-3px); }
+  .stack-card .tag{ font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--green); letter-spacing:.1em; }
+  .stack-card .name{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:15px; margin-top:8px; }
+
+  /* ---------- PROJECTS ---------- */
+  .project-list{ display:flex; flex-direction:column; gap:1px; background:var(--line); }
+  .project-card{
+    background:var(--bp-bg);
+    padding:34px 30px;
+    display:grid;
+    grid-template-columns: 90px 1fr auto;
+    gap:24px;
+    align-items:start;
+    text-decoration:none;
+    color:inherit;
+    transition:.2s background;
+  }
+  .project-card:hover{ background:var(--bp-bg-2); }
+  .project-id{ font-family:'IBM Plex Mono', monospace; color:var(--line); font-size:13px; padding-top:3px; }
+  .project-card:hover .project-id{ color:var(--amber); }
+  .project-title{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:18px; margin:0 0 8px; color:var(--paper); }
+  .project-desc{ color:var(--slate); font-size:14.5px; line-height:1.6; margin:0 0 12px; max-width:60ch; }
+  .project-tags{ display:flex; gap:8px; flex-wrap:wrap; }
+  .project-tags span{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--paper-dim); border:1px solid var(--line); padding:3px 8px; letter-spacing:.05em; }
+  .project-link{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--amber); white-space:nowrap; padding-top:4px; }
+  @media (max-width:700px){
+    .project-card{ grid-template-columns:1fr; }
+    .project-id{ display:none; }
+  }
+
+  /* ---------- CERTIFICATIONS ---------- */
+  .cert-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+    gap:16px;
+  }
+  .cert-card{
+    border:1px solid var(--line);
+    background:var(--card-bg);
+    padding:22px 22px 20px;
+    transition:.2s;
+  }
+  .cert-card:hover{ border-color:var(--amber); transform:translateY(-3px); }
+  .cert-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; }
+  .cert-check{ color:var(--green); font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.05em; }
+  .cert-issuer{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--slate); letter-spacing:.08em; text-transform:uppercase; }
+  .cert-title{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:16px; color:var(--paper); margin:2px 0 10px; }
+  .cert-date{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--paper-dim); }
+
+  /* ---------- CONTACT ---------- */
+  .contact-panel{
+    border:1px solid var(--line);
+    background:var(--card-bg);
+    padding:56px 44px;
+    text-align:center;
+  }
+  .contact-panel h2{ margin-bottom:16px; }
+  .contact-panel p{ color:var(--slate); max-width:52ch; margin:0 auto 30px; line-height:1.6; }
+  .contact-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  footer{
+    padding:32px 6vw 40px;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--line);
+    letter-spacing:.05em;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand"><span class="dot"></span> PRIYADHARSHINI.OS</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#stack">Stack</a>
+    <a href="#projects">Projects</a>
+    <a href="#certs">Certs</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow"><span class="bar"></span><span class="label">System Profile · Cloud &amp; DevOps</span></div>
+      <h1 class="name">PRIYA<span class="accent">DHARSHINI</span> O S</h1>
+      <p class="role">DevOps &amp; Cloud Engineer</p>
+      <p class="tagline">Hands-on experience with AWS, Azure, Linux, Docker, Kubernetes, Jenkins, Git and Ansible — built through real-world labs on the KodeKloud Engineer platform.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#projects">Portfolio Sections</a>
+        <a class="btn btn-ghost" href="https://github.com/priyadharshini0414/devops-cloud-portfolio" target="_blank" rel="noopener">devops-cloud-portfolio ↗</a>
+      </div>
+    </div>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram connecting core engineer node to AWS, Azure, Docker, Kubernetes, Ansible and Git nodes">
+        <!-- crosshair corner marks -->
+        <line class="crosshair" x1="20" y1="0" x2="20" y2="20"/>
+        <line class="crosshair" x1="0" y1="20" x2="20" y2="20"/>
+        <line class="crosshair" x1="460" y1="460" x2="460" y2="480"/>
+        <line class="crosshair" x1="460" y1="460" x2="480" y2="460"/>
+
+        <!-- connectors -->
+        <line class="conn" x1="240" y1="240" x2="240" y2="70"/>
+        <line class="conn" x1="240" y1="240" x2="400" y2="140"/>
+        <line class="conn" x1="240" y1="240" x2="420" y2="300"/>
+        <line class="conn" x1="240" y1="240" x2="300" y2="420"/>
+        <line class="conn" x1="240" y1="240" x2="140" y2="420"/>
+        <line class="conn" x1="240" y1="240" x2="60" y2="300"/>
+        <line class="conn" x1="240" y1="240" x2="80" y2="140"/>
+
+        <!-- outer nodes -->
+        <g>
+          <circle class="node-circle" cx="240" cy="70" r="30"/>
+          <text class="node-label" x="240" y="35" text-anchor="middle">AWS</text>
+        </g>
+        <g>
+          <circle class="node-circle" cx="400" cy="140" r="28"/>
+          <text class="node-label" x="400" y="108" text-anchor="middle">AZURE</text>
+        </g>
+        <g>
+          <circle class="node-circle" cx="420" cy="300" r="28"/>
+          <text class="node-label" x="452" y="304" text-anchor="start">DOCKER</text>
+        </g>
+        <g>
+          <circle class="node-circle" cx="300" cy="420" r="28"/>
+          <text class="node-label" x="300" y="462" text-anchor="middle">K8S</text>
+        </g>
+        <g>
+          <circle class="node-circle" cx="140" cy="420" r="28"/>
+          <text class="node-label" x="140" y="462" text-anchor="middle">ANSIBLE</text>
+        </g>
+        <g>
+          <circle class="node-circle" cx="60" cy="300" r="28"/>
+          <text class="node-label" x="28" y="304" text-anchor="end">GIT</text>
+        </g>
+        <g>
+          <circle class="node-circle" cx="80" cy="140" r="28"/>
+          <text class="node-label" x="80" y="108" text-anchor="middle">JENKINS</text>
+        </g>
+
+        <!-- core node -->
+        <circle class="node-circle core" cx="240" cy="240" r="42"/>
+        <text class="node-label core" x="240" y="236" text-anchor="middle">POS</text>
+        <text class="node-label" x="240" y="252" text-anchor="middle" style="font-size:9px; fill:#092F4F;">CORE</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner reveal">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>About</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="about-grid">
+      <p class="about-text">
+        Hi, I'm Priyadharshini — a <strong>Computer Science graduate</strong> and <strong>Cloud &amp; DevOps enthusiast</strong>. I work in <strong>Cloud &amp; DevOps</strong> and I'm passionate about <strong>automation and CI/CD</strong>, continuously learning cloud technologies through real-world labs. Alongside infrastructure work, I've also built a project in <strong>Python</strong> applying data science fundamentals. This portfolio showcases hands-on experience with AWS, Azure, Linux, Docker, Kubernetes, Jenkins, Git and Ansible, all built through the KodeKloud Engineer platform.
+      </p>
+      <div class="spec-box">
+        <div class="spec-row"><span>Education</span><span>Computer Science Graduate</span></div>
+        <div class="spec-row"><span>Role</span><span>Cloud &amp; DevOps</span></div>
+        <div class="spec-row"><span>Focus</span><span>Automation &amp; CI/CD</span></div>
+        <div class="spec-row"><span>Learning platform</span><span>KodeKloud Engineer</span></div>
+        <div class="spec-row"><span>Location</span><span>Madurai, Tamil Nadu</span></div>
+        <div class="spec-row"><span>Status</span><span style="color:var(--green)">● Continuously learning</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="section-inner reveal">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Stack</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="tag">CLOUD</div><div class="name">AWS</div></div>
+      <div class="stack-card"><div class="tag">CLOUD</div><div class="name">Azure</div></div>
+      <div class="stack-card"><div class="tag">CONTAINERS</div><div class="name">Docker</div></div>
+      <div class="stack-card"><div class="tag">CONTAINERS</div><div class="name">Kubernetes</div></div>
+      <div class="stack-card"><div class="tag">CI/CD</div><div class="name">Jenkins</div></div>
+      <div class="stack-card"><div class="tag">INFRASTRUCTURE</div><div class="name">Linux</div></div>
+      <div class="stack-card"><div class="tag">INFRASTRUCTURE</div><div class="name">Git</div></div>
+      <div class="stack-card"><div class="tag">INFRASTRUCTURE</div><div class="name">Ansible</div></div>
+      <div class="stack-card"><div class="tag">LANGUAGE</div><div class="name">Python</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner reveal">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>Portfolio Sections</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="project-list">
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/AWS" target="_blank" rel="noopener">
+        <span class="project-id mono">01</span>
+        <div>
+          <p class="project-title">AWS</p>
+          <p class="project-desc">Hands-on labs covering core AWS services, completed on the KodeKloud Engineer platform.</p>
+          <div class="project-tags"><span>Cloud</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Azure" target="_blank" rel="noopener">
+        <span class="project-id mono">02</span>
+        <div>
+          <p class="project-title">Azure</p>
+          <p class="project-desc">Practical exercises across Microsoft Azure's core cloud services.</p>
+          <div class="project-tags"><span>Cloud</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Linux" target="_blank" rel="noopener">
+        <span class="project-id mono">03</span>
+        <div>
+          <p class="project-title">Linux</p>
+          <p class="project-desc">System administration tasks and command-line fundamentals from real lab environments.</p>
+          <div class="project-tags"><span>Infrastructure</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Docker" target="_blank" rel="noopener">
+        <span class="project-id mono">04</span>
+        <div>
+          <p class="project-title">Docker</p>
+          <p class="project-desc">Containerization exercises — building, running, and managing Docker workloads.</p>
+          <div class="project-tags"><span>Containers</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Kubernetes" target="_blank" rel="noopener">
+        <span class="project-id mono">05</span>
+        <div>
+          <p class="project-title">Kubernetes</p>
+          <p class="project-desc">Orchestration labs covering deployments, services, and cluster fundamentals.</p>
+          <div class="project-tags"><span>Containers</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Git" target="_blank" rel="noopener">
+        <span class="project-id mono">06</span>
+        <div>
+          <p class="project-title">Git</p>
+          <p class="project-desc">Version control workflows and collaboration exercises.</p>
+          <div class="project-tags"><span>Infrastructure</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Jenkins" target="_blank" rel="noopener">
+        <span class="project-id mono">07</span>
+        <div>
+          <p class="project-title">Jenkins</p>
+          <p class="project-desc">CI/CD pipeline setup and automation tasks built on Jenkins.</p>
+          <div class="project-tags"><span>CI/CD</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Ansible" target="_blank" rel="noopener">
+        <span class="project-id mono">08</span>
+        <div>
+          <p class="project-title">Ansible</p>
+          <p class="project-desc">Configuration management and automation playbooks.</p>
+          <div class="project-tags"><span>Infrastructure</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/priyadharshini0414/devops-cloud-portfolio/tree/main/Terraform" target="_blank" rel="noopener">
+        <span class="project-id mono">09</span>
+        <div>
+          <p class="project-title">Terraform</p>
+          <p class="project-desc">Infrastructure-as-code exercises for provisioning cloud resources.</p>
+          <div class="project-tags"><span>Infrastructure</span></div>
+        </div>
+        <span class="project-link">Open folder ↗</span>
+      </a>
+
+      <a class="project-card" href="https://drive.google.com/file/d/1Y1CnBdPwCQWcttz1oIzZq7Y3N-FOOuFD/view?usp=drive_link" target="_blank" rel="noopener">
+        <span class="project-id mono">10</span>
+        <div>
+          <p class="project-title">Python for Data Science</p>
+          <p class="project-desc">A Python-based project applying data analysis fundamentals — built alongside the IBM Skills Network certification. Full details in resume.</p>
+          <div class="project-tags"><span>Python</span><span>Data Science</span></div>
+        </div>
+        <span class="project-link">View resume ↗</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <div class="section-inner reveal">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Certifications</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="cert-grid">
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">Infosys Springboard</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">AWS Certified Developer – Associate</p>
+        <p class="cert-date">Awarded June 2025</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">KodeKloud</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">100 Days of Cloud — AWS</p>
+        <p class="cert-date">Completed May 2026</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">KodeKloud</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">100 Days of Cloud — Azure</p>
+        <p class="cert-date">Completed August 2026</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">KodeKloud Engineer</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">Docker — Level 1</p>
+        <p class="cert-date">Feb – Mar 2026</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">KodeKloud Engineer</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">Ansible — Level 1</p>
+        <p class="cert-date">Feb – Mar 2026</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">KodeKloud Engineer</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">Kubernetes — Level 1</p>
+        <p class="cert-date">Mar – Apr 2026</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">KodeKloud Engineer</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">Git — Level 1</p>
+        <p class="cert-date">Mar – Apr 2026</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">KodeKloud Engineer</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">Jenkins — Level 1</p>
+        <p class="cert-date">Apr – May 2026</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-top"><span class="cert-issuer">IBM Skills Network</span><span class="cert-check">✓ Verified</span></div>
+        <p class="cert-title">Python for Data Science</p>
+        <p class="cert-date">Foundational</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner reveal">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2>Contact</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="contact-panel">
+      <h2>Let's connect</h2>
+      <p>Fresher looking for DevOps &amp; Cloud engineering opportunities. Based in Madurai, Tamil Nadu — open to remote and relocation. Reach out below.</p>
+      <div class="contact-row">
+        <a class="btn btn-primary" href="https://drive.google.com/file/d/1Y1CnBdPwCQWcttz1oIzZq7Y3N-FOOuFD/view?usp=drive_link" target="_blank" rel="noopener">Download Resume ↗</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/priyadharshini-o-s/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn btn-ghost" href="https://github.com/priyadharshini0414" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn btn-ghost" href="mailto:dharshu.surendran@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  BUILT WITH GIT · DEPLOYED WITH INTENT © 2026 PRIYADHARSHINI O S
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
